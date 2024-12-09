@@ -1,0 +1,60 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="max-w-md w-full p-6 bg-white rounded-lg shadow-lg">
+      <h2 class="text-2xl font-bold mb-6 text-center">Iniciar Sesión</h2>
+      
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2">
+            Correo Electrónico
+          </label>
+          <input
+            type="email"
+            formControlName="correo"
+            class="w-full px-3 py-2 border rounded-lg"
+            [ngClass]="{'border-red-500': loginForm.get('correo')?.errors && loginForm.get('correo')?.touched}"
+          >
+          <div *ngIf="loginForm.get('correo')?.errors?.['required'] && loginForm.get('correo')?.touched"
+               class="text-red-500 text-xs mt-1">
+            El correo es requerido
+          </div>
+          <div *ngIf="loginForm.get('correo')?.errors?.['email'] && loginForm.get('correo')?.touched"
+               class="text-red-500 text-xs mt-1">
+            Ingrese un correo válido
+          </div>
+        </div>
+  
+        <div class="mb-6">
+          <label class="block text-gray-700 text-sm font-bold mb-2">
+            Contraseña
+          </label>
+          <input
+            type="password"
+            formControlName="contrasena"
+            class="w-full px-3 py-2 border rounded-lg"
+            [ngClass]="{'border-red-500': loginForm.get('contrasena')?.errors && loginForm.get('contrasena')?.touched}"
+          >
+          <div *ngIf="loginForm.get('contrasena')?.errors?.['required'] && loginForm.get('contrasena')?.touched"
+               class="text-red-500 text-xs mt-1">
+            La contraseña es requerida
+          </div>
+        </div>
+  
+        <div *ngIf="error" class="mb-4 text-red-500 text-sm text-center">
+          {{ error }}
+        </div>
+  
+        <button
+          type="submit"
+          [disabled]="loginForm.invalid || loading"
+          class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 disabled:bg-blue-300"
+        >
+          {{ loading ? 'Cargando...' : 'Iniciar Sesión' }}
+        </button>
+        <div class="text-center">
+            <a routerLink="/register" class="text-blue-500 hover:text-blue-700">
+              ¿No tienes cuenta? Regístrate aquí
+            </a>
+          </div>
+      </form>
+    </div>
+  </div>

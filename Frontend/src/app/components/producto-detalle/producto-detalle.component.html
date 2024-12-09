@@ -1,0 +1,93 @@
+<!-- Añadir el Navbar -->
+<app-navbar></app-navbar>
+
+<div class="container mx-auto px-4 py-8">
+  <!-- Loading spinner -->
+  <div *ngIf="loading" class="flex justify-center items-center h-64">
+    <div class="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+    {{error}}
+  </div>
+
+  <!-- Product details -->
+  <div *ngIf="producto && !loading" class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+    <div class="md:flex">
+      <!-- Imagen del producto -->
+      <div class="md:flex-shrink-0">
+        <img 
+          [src]="producto.urlImagen || '/assets/placeholder.jpg'" 
+          [alt]="producto.nombre"
+          class="h-48 w-full object-cover md:h-full md:w-96"
+        >
+      </div>
+      
+      <!-- Detalles del producto -->
+      <div class="p-8">
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">{{producto.nombre}}</h1>
+        
+        <!-- Categoría -->
+        <p class="text-sm text-gray-600 mb-4" *ngIf="producto.categoria">
+          Categoría: {{producto.categoria.nombre}}
+          <span *ngIf="producto.categoria.descripcion" class="text-xs text-gray-500">
+            - {{producto.categoria.descripcion}}
+          </span>
+        </p>
+        
+        <!-- Descripción -->
+        <div class="mb-4" *ngIf="producto.descripcion">
+          <p class="text-gray-700">{{producto.descripcion}}</p>
+        </div>
+        
+        <!-- Precio y Stock -->
+        <div class="mb-4">
+          <span class="text-2xl font-bold text-gray-900">${{producto.precio}}</span>
+          <span class="ml-2 text-sm text-gray-600">
+            Stock disponible: {{producto.stock}}
+          </span>
+        </div>
+        
+        <!-- Estado -->
+        <div class="mb-4">
+          <span class="px-2 py-1 text-xs rounded-full"
+                [ngClass]="producto.activo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+            {{producto.activo ? 'Activo' : 'Inactivo'}}
+          </span>
+        </div>
+        
+        <!-- Fechas -->
+        <div class="text-xs text-gray-500 mb-4">
+          <p>Creado: {{formatearFecha(producto.fechaCreacion)}}</p>
+          <p>Actualizado: {{formatearFecha(producto.fechaActualizacion)}}</p>
+        </div>
+
+        <!-- Botones -->
+        <div class="flex space-x-4">
+          <button 
+            *ngIf="producto.activo && producto.stock > 0"
+            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Añadir al carrito
+          </button>
+          
+          <button 
+            (click)="volverAtras()"
+            class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            Volver
+          </button>
+        </div>
+
+        <!-- Mensajes de estado -->
+        <p *ngIf="producto.stock === 0" class="text-red-600 mt-4">
+          Producto agotado
+        </p>
+        <p *ngIf="!producto.activo" class="text-orange-600 mt-4">
+          Este producto no está disponible actualmente
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
